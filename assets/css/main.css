@@ -1,0 +1,430 @@
+/* ==========================================================================
+   TURN SOUND — 全站樣式
+   取代 Mobirise 產生的 mbr-additional.css / theme/style.css / bootstrap
+   斷點只有兩個：768px（手機↔平板）、1024px（平板↔桌機）
+   字級與間距以 clamp() 流體縮放，多數區塊不需要斷點
+   ========================================================================== */
+
+/* --- Design tokens ------------------------------------------------------ */
+:root {
+  --brand: #114796;
+  --ink: #232323;
+  --ink-2: #333;
+  --ink-soft: #65676c;
+  --bg: #fff;
+  --bg-alt: #f4f4f4;
+  --bg-nav: #f9f9fc;
+  --bg-footer: #f0f0f4;
+  --line: #ccc;
+
+  --font: "Spartan", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+
+  /* 流體字級：手機 → 桌機 */
+  --fs-hero: clamp(1.75rem, 6.5vw, 4rem);
+  --fs-h2: clamp(1.75rem, 4vw, 3rem);
+  --fs-h3: clamp(1.5rem, 3vw, 2.5rem);
+  --fs-body: clamp(1rem, 1.1vw, 1.3rem);
+  --fs-nav: 1.2rem;
+
+  --pad-section: clamp(3rem, 8vw, 6rem);
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --maxw: 1200px;
+  --nav-h: 71px;
+}
+
+/* --- Reset -------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  /* 防呆：任何區塊萬一溢出也不會產生整頁橫向捲動與白邊 */
+  overflow-x: hidden;
+}
+
+img, picture, svg, iframe { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+ul { list-style: none; padding: 0; }
+h1, h2, h3, h4 { line-height: 1.15; font-weight: 700; text-wrap: balance; }
+p { text-wrap: pretty; }
+
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+
+/* --- Layout ------------------------------------------------------------- */
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+.section { padding-block: var(--pad-section); }
+.section--alt { background: var(--bg-alt); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+/* --- Header / Nav ------------------------------------------------------- */
+.site-header {
+  position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 1000;
+  background: var(--bg-nav);
+}
+.nav {
+  display: flex; align-items: center; gap: 1rem;
+  min-height: var(--nav-h);
+  max-width: 1600px; margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.nav__logo img { height: 48px; width: auto; }
+.nav__toggle {
+  margin-inline-start: auto;
+  display: grid; place-content: center;
+  width: 48px; height: 48px;            /* 觸控目標 ≥44px */
+  margin-inline-end: -12px;
+}
+.nav__toggle-bars { display: block; width: 26px; height: 2px; background: var(--ink); position: relative; }
+.nav__toggle-bars::before,
+.nav__toggle-bars::after {
+  content: ""; position: absolute; inset-inline: 0; height: 2px; background: var(--ink);
+  transition: transform .25s ease, top .25s ease;
+}
+.nav__toggle-bars::before { top: -8px; }
+.nav__toggle-bars::after { top: 8px; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars { background: transparent; }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars::before { top: 0; transform: rotate(45deg); }
+.nav__toggle[aria-expanded="true"] .nav__toggle-bars::after { top: 0; transform: rotate(-45deg); }
+
+.nav__menu { display: flex; align-items: center; gap: clamp(.5rem, 1.5vw, 1.5rem); }
+.nav__links { display: flex; gap: clamp(.25rem, 1vw, 1rem); }
+.nav__links a {
+  display: block; padding: .6rem .5rem;
+  font-size: var(--fs-nav); font-weight: 500; color: var(--ink);
+  transition: color .2s;
+}
+.nav__links a:hover,
+.nav__links a[aria-current="page"] { color: var(--brand); }
+
+.nav__social { display: flex; gap: .25rem; }
+.nav__social a {
+  display: grid; place-content: center;
+  width: 44px; height: 44px;            /* 觸控目標 ≥44px */
+  color: #000; transition: color .2s;
+}
+.nav__social a:hover { color: var(--brand); }
+.nav__social svg { width: 22px; height: 22px; fill: currentColor; }
+
+@media (max-width: 1024px) {
+  .nav__toggle { display: grid; }
+  .nav__menu {
+    position: absolute; inset-block-start: 100%; inset-inline: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--bg-nav);
+    border-block-start: 1px solid rgb(0 0 0 / .08);
+    padding: .5rem var(--gutter) 1.25rem;
+    display: none;
+  }
+  .nav__menu[data-open="true"] { display: flex; }
+  .nav__links { flex-direction: column; gap: 0; }
+  .nav__links a { padding: .9rem .25rem; font-size: 1.15rem; }
+  .nav__social { justify-content: center; padding-block-start: .75rem; }
+}
+@media (min-width: 1025px) {
+  .nav__toggle { display: none; }
+}
+
+/* 固定表頭的讓位 */
+.page { padding-block-start: var(--nav-h); }
+.page--hero { padding-block-start: 0; }   /* hero 自帶滿版背景，不讓位 */
+
+/* --- Buttons ------------------------------------------------------------ */
+/* 沿用原本的圖片造型按鈕，但文字改用 flex 置中、觸控區拉到 44px */
+.btn-img {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; width: 150px; max-width: 100%;
+  isolation: isolate;
+}
+.btn-img img { width: 100%; height: auto; }
+.btn-img span {
+  position: absolute; inset: 0;
+  display: grid; place-content: center;
+  padding-inline-end: 12%;               /* 圖片右側有箭頭造型，文字略往左 */
+  font-size: 1rem; font-weight: 500; color: #000;
+  pointer-events: none;
+}
+
+/* --- Hero --------------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex; align-items: flex-end;
+  background: #000 center / cover no-repeat;
+  color: #fff;
+  isolation: isolate;
+}
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgb(0 0 0 / .6);
+}
+.hero--light::after { background: rgb(0 0 0 / .2); }
+.hero__inner { width: 100%; padding-block-end: clamp(3rem, 16vh, 11rem); }
+.hero__title {
+  font-size: var(--fs-hero);
+  font-weight: 400; line-height: 1.1; color: #fff;
+  overflow-wrap: break-word;
+}
+
+/* --- 圖文並排（首頁簡介 / 關於我們） ------------------------------------- */
+.split {
+  display: grid; align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  background: var(--bg-alt);
+  padding-block: var(--pad-section);
+}
+.split__media { justify-self: center; }
+.split__media img { width: min(360px, 70vw); height: auto; }
+.split__title { font-size: var(--fs-h2); font-weight: 400; letter-spacing: .08em; margin-block-end: clamp(1.5rem, 4vw, 3.75rem); }
+.split__body { display: flex; gap: 1.5rem; align-items: flex-start; }
+.split__rule { width: 50px; flex: none; }
+.split__text { font-size: var(--fs-body); line-height: 1.8; color: var(--ink-2); }
+
+@media (min-width: 1025px) {
+  .split { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .split--flip .split__media { order: 2; }
+  .split__text { text-align: justify; }
+}
+@media (max-width: 1024px) {
+  .split { text-align: center; }
+  .split__body { flex-direction: column; align-items: center; }
+  .split__inner { display: flex; flex-direction: column; align-items: center; }
+}
+
+/* --- 服務項目三欄 -------------------------------------------------------- */
+.cards { background: var(--bg-alt); text-align: center; padding-block: var(--pad-section); }
+.cards__title { font-size: var(--fs-h2); color: #222; margin-block-end: clamp(2rem, 5vw, 3.75rem); }
+.cards__grid {
+  /* 三個服務項目一律並排，圖示隨螢幕縮放（原設計為 flex + gap 60px） */
+  display: grid; gap: clamp(.75rem, 4vw, 3.75rem);
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 760px; margin-inline: auto;
+  margin-block-end: clamp(2rem, 5vw, 3rem);
+}
+.cards__item img { width: clamp(64px, 20vw, 120px); height: auto; margin-inline: auto; }
+.cards__item p { margin-block-start: 1rem; font-size: var(--fs-body); color: var(--ink-2); }
+
+/* --- 作品縮圖牆 ---------------------------------------------------------- */
+.gallery { background: var(--bg-alt); text-align: center; padding-block: var(--pad-section); }
+.gallery__title { font-size: var(--fs-h2); color: #222; margin-block-end: clamp(2rem, 5vw, 3.75rem); }
+.gallery__grid {
+  /* 原設計為 2×2 */
+  display: grid; gap: clamp(.75rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 800px; margin-inline: auto;
+  margin-block-end: clamp(2rem, 5vw, 3rem);
+}
+.gallery__grid img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; }
+
+/* --- 頁面標題列 --------------------------------------------------------- */
+.page-head, .team-intro { background: var(--bg-alt); text-align: center; }
+.page-head { padding: clamp(3rem, 8vw, 5rem) var(--gutter) clamp(1.5rem, 4vw, 2.5rem); }
+.page-head h1 { font-size: var(--fs-h2); color: #222; letter-spacing: .05em; }
+
+/* --- 服務項目：大圖 + 說明，左右交替 ------------------------------------- */
+/* 三個圓形圖示的原始素材把圓畫得比畫布寬、左右各被切掉約 120px。
+   已依擬合出的圓參數（R=536、線寬 29.5、#114796）重建成完整的圓，
+   輸出為 864×864 置中，因此這裡正常置中顯示即可。 */
+.split--service .split__media img { width: min(432px, 78vw); }
+.split--service .split__title {
+  font-size: var(--fs-h3); font-weight: 700; letter-spacing: normal; color: var(--brand);
+  margin-block-end: 1.25rem;
+}
+
+/* --- 團隊成員 ----------------------------------------------------------- */
+.team-intro { padding-block: var(--pad-section) 0; }
+.team-intro h2 { font-size: var(--fs-h2); color: #222; }
+
+.member {
+  display: grid; gap: clamp(1.5rem, 4vw, 2.5rem);
+  justify-items: center;
+  max-width: 1100px; margin-inline: auto;
+  padding: clamp(2.5rem, 7vw, 3.75rem) var(--gutter);
+  background: var(--bg-alt);
+}
+.member__photo img {
+  width: clamp(180px, 45vw, 280px); aspect-ratio: 1; height: auto;
+  object-fit: cover; border-radius: 50%;
+  box-shadow: 0 4px 20px rgb(0 0 0 / .1);
+}
+.member__info { max-width: 560px; }
+.member__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.member__name { font-size: clamp(1.5rem, 4vw, 2rem); color: #222; margin-block-end: .8rem; }
+.member__name .en { color: var(--brand); font-weight: 600; font-size: .6em; margin-inline-start: 6px; font-style: italic; }
+.member__fb {
+  flex: none; display: grid; place-content: center;
+  width: 44px; height: 44px; color: #4267b2;   /* 觸控目標 ≥44px */
+  transition: transform .2s;
+}
+.member__fb:hover { transform: scale(1.1); }
+.member__fb svg { width: 24px; height: 24px; fill: currentColor; }
+.member__role { font-size: 1.1rem; color: var(--brand); margin-block-end: 1.2rem; }
+.member__bio { line-height: 1.8; color: var(--ink-2); }
+
+@media (min-width: 769px) {
+  .member { grid-template-columns: auto minmax(0, 1fr); align-items: start; justify-items: start; gap: 40px; }
+  .member__info { padding-block-start: 30px; }
+  .member__bio { text-align: justify; }
+}
+@media (max-width: 768px) {
+  .member__header { justify-content: center; }
+  .member__info { text-align: center; }
+}
+
+/* --- 影片 --------------------------------------------------------------- */
+.video__title { font-size: var(--fs-h3); margin-block-end: 1.5rem; }
+.video__frame { position: relative; aspect-ratio: 16 / 9; }
+.video__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* --- 合作夥伴 ----------------------------------------------------------- */
+.partners {
+  display: grid; gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  max-width: 1200px; margin-inline: auto;
+}
+.partner { text-align: center; }
+.partner img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 4px; margin-block-end: 1.25rem;
+}
+.partner h3 { font-size: 1.35rem; color: var(--ink); }
+.partner .role { font-size: 1rem; color: var(--brand); margin-block-start: .35rem; }
+.partner p:not(.role) {
+  margin-block-start: .75rem; font-size: 1rem; line-height: 1.8; color: var(--ink-2);
+  text-align: justify;
+}
+
+/* --- 聯繫我們 ----------------------------------------------------------- */
+.contact { display: grid; gap: clamp(2rem, 6vw, 4rem); align-items: center; }
+@media (min-width: 1025px) { .contact { grid-template-columns: 1fr 1fr; } }
+
+.contact__info h2 { font-size: var(--fs-h3); margin-block-end: 1.5rem; }
+.contact__info p { margin-block: .5rem; color: var(--ink-2); }
+.contact__social { display: flex; gap: .25rem; margin-block-start: 1.25rem; }
+.contact__social a { display: grid; place-content: center; width: 44px; height: 44px; color: var(--brand); }
+.contact__social svg { width: 22px; height: 22px; fill: currentColor; }
+
+.form { display: grid; gap: 1rem; }
+.form__row { display: grid; gap: 1rem; }
+@media (min-width: 561px) { .form__row { grid-template-columns: 1fr 1fr; } }
+.form input, .form textarea {
+  width: 100%; min-height: 48px; padding: .75rem 1rem;
+  font: inherit; font-size: 1rem; color: var(--ink);
+  background: #fff; border: 1px solid var(--line); border-radius: 4px;
+}
+.form textarea { min-height: 140px; resize: vertical; }
+.form input:focus-visible, .form textarea:focus-visible { border-color: var(--brand); outline-offset: 0; }
+.form__note { font-size: .95rem; color: var(--ink-soft); }
+.form .btn-img { justify-self: start; }
+
+@media (max-width: 1024px) {
+  .contact__info { text-align: center; }
+  .contact__social { justify-content: center; }
+  .form .btn-img { justify-self: center; }
+}
+
+/* --- 作品案例：標籤篩選 + 燈箱 ------------------------------------------- */
+.filters {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: clamp(.5rem, 2vw, 1.25rem);
+  padding-block-end: clamp(2rem, 5vw, 3rem);
+}
+.filters button {
+  min-height: 44px; padding: .5rem 1.1rem;   /* 觸控目標 ≥44px */
+  border-radius: 100px; font-size: 1rem; color: var(--ink-2);
+  transition: background-color .2s, color .2s;
+}
+.filters button:hover { background: rgb(17 71 150 / .08); }
+.filters button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+
+.works {
+  display: grid; gap: clamp(.75rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  max-width: 1100px; margin-inline: auto;
+}
+.works__item {
+  position: relative; display: block; width: 100%;
+  border-radius: 4px; overflow: hidden; cursor: pointer;
+  background: #000;
+}
+.works__item[hidden] { display: none; }
+.works__item img {
+  width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  transition: transform .3s, opacity .3s;
+}
+.works__item:hover img, .works__item:focus-visible img { transform: scale(1.05); opacity: .75; }
+.works__item::after {
+  content: ""; position: absolute; inset-block-end: 12px; inset-inline-end: 12px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgb(255 255 255 / .9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z'/%3E%3C/svg%3E") center / 20px no-repeat;
+  opacity: 0; transition: opacity .3s;
+}
+.works__item:hover::after, .works__item:focus-visible::after { opacity: 1; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 2000;
+  padding: var(--gutter);
+  background: rgb(0 0 0 / .9);
+  border: 0;
+}
+/* 只在開啟時佈局；否則會蓋掉 dialog 預設的 display:none 而讓燈箱常駐 */
+.lightbox[open] { display: grid; place-items: center; }
+.lightbox::backdrop { background: rgb(0 0 0 / .9); }
+.lightbox__body { width: min(1100px, 100%); }
+.lightbox__body iframe,
+.lightbox__body img { width: 100%; aspect-ratio: 16 / 9; border: 0; }
+.lightbox__body img { object-fit: contain; height: auto; aspect-ratio: auto; max-height: 80vh; }
+.lightbox__close {
+  position: absolute; inset-block-start: max(1rem, env(safe-area-inset-top));
+  inset-inline-end: 1rem;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-content: center;
+  background: rgb(255 255 255 / .15); color: #fff; font-size: 1.5rem; line-height: 1;
+}
+.lightbox__close:hover { background: rgb(255 255 255 / .3); }
+
+/* --- Footer ------------------------------------------------------------- */
+.site-footer { background: var(--bg-footer); padding-block: clamp(3rem, 8vw, 5rem); text-align: center; }
+.site-footer h2 { font-size: 1.75rem; font-weight: 700; margin-block-end: clamp(1.5rem, 4vw, 2.5rem); }
+.site-footer__cols {
+  display: grid; gap: clamp(1.5rem, 4vw, 2rem);
+  max-width: 1000px; margin-inline: auto;
+}
+.site-footer p { margin-block: .35rem; font-size: 1rem; }
+.site-footer__social { display: flex; justify-content: center; gap: .25rem; margin-block-start: 1rem; }
+.site-footer__social a { display: grid; place-content: center; width: 44px; height: 44px; color: var(--brand); }
+.site-footer__social svg { width: 22px; height: 22px; fill: currentColor; }
+.site-footer__copy { margin-block-start: clamp(2rem, 6vw, 3.75rem); font-size: 1rem; color: #2e2e2e; }
+
+@media (min-width: 769px) {
+  .site-footer__cols { grid-template-columns: 1fr 1fr; }
+  .site-footer__cols > :first-child { text-align: right; padding-inline-end: 3rem; border-inline-end: 1px solid var(--line); }
+  .site-footer__cols > :last-child { text-align: left; padding-inline-start: 3rem; }
+  .site-footer__social { justify-content: flex-end; }
+}
+
+/* --- 回到頂端 ----------------------------------------------------------- */
+.to-top {
+  position: fixed; inset-block-end: 1.25rem; inset-inline-end: 1.25rem; z-index: 900;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-content: center;
+  background: var(--brand); color: #fff;
+  opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
+}
+.to-top[data-show="true"] { opacity: 1; visibility: visible; }
+.to-top svg { width: 20px; height: 20px; fill: currentColor; }

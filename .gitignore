@@ -3,3 +3,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+
+### Claude Code ###
+# 本機權限設定、預覽伺服器設定，以及 worktree 副本（主 repo 的 .claude/worktrees/）
+.claude/
