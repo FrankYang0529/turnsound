@@ -138,6 +138,8 @@ p { text-wrap: pretty; }
 }
 @media (min-width: 1025px) {
   .nav__toggle { display: none; }
+  /* 窄螢幕靠漢堡按鈕的 margin auto 推到右邊，桌機版按鈕隱藏，改由選單自己靠右 */
+  .nav__menu { margin-inline-start: auto; }
 }
 
 /* 固定表頭的讓位 */
